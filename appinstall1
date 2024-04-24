@@ -1,1 +1,14 @@
-print("hello1")
+# Define the URL for 7-Zip download
+$zipURL = "https://www.7-zip.org/a/7z1900-x64.exe"
+
+# Define the path to download the installer
+$downloadPath = "$env:TEMP\7z_installer.exe"
+
+# Download 7-Zip installer
+Invoke-WebRequest -Uri $zipURL -OutFile $downloadPath
+
+# Install 7-Zip silently
+Start-Process -FilePath $downloadPath -ArgumentList "/S" -Wait
+
+# Clean up downloaded installer
+Remove-Item $downloadPath
