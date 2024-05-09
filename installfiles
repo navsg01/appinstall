@@ -1,0 +1,17 @@
+# Define variables
+$sourcePath = "\\sharedimgstorage.file.core.windows.net\testshare1"  # Path to the folder containing the installation files
+$destinationPath = "C:\Temp"  # Destination folder where the files will be copied
+$apps = @("7z2404-x64.exe", "ChromeStandaloneSetup64.exe")  # List of applications to install
+
+# Copy files from Azure file share to local machine
+foreach ($app in $apps) {
+    $sourceFile = Join-Path -Path $sourcePath -ChildPath $app
+    $destinationFile = Join-Path -Path $destinationPath -ChildPath $app
+    Copy-Item -Path $sourceFile -Destination $destinationFile -Force
+}
+
+# Install applications
+foreach ($app in $apps) {
+    $appPath = Join-Path -Path $destinationPath -ChildPath $app
+    Start-Process -FilePath $appPath -ArgumentList "/silent", "/norestart" -Wait
+}
