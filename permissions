@@ -1,0 +1,20 @@
+# Define the path for the new folder 
+$folderPath = "C:\Temp\Test1"
+
+# Create a new folder
+New-Item -ItemType Directory -Path $folderPath
+
+# Get the security object for the folder
+$folderSecurity = Get-Acl -Path $folderPath
+
+# Define the permissions to prevent deletion
+$permission = "Users", "Delete", "Deny"
+
+# Create a new access rule
+$accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule($permission)
+
+# Add the access rule to the security object
+$folderSecurity.AddAccessRule($accessRule)
+
+# Set the modified security object back to the folder
+Set-Acl -Path $folderPath -AclObject $folderSecurity
